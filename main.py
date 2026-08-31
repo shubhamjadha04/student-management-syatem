@@ -1,3 +1,7 @@
+from database import cursor,conn
+import mysql.connector
+
+
 def user_register():
     try:      
         name =input("Enter your Name: ")
@@ -17,13 +21,21 @@ def user_register():
 
         print("You have successfully Register.")
 
+        query = """
+                INSERT INTO users (name,email,password,role)
+                VALUES(%s,%s,%s,%s)
+                 """
+
+        cursor.execute(query,(name,email,pwd,role))
+        conn.commit()
+
 
     except ValueError as e:
         print("Error",e)
 
     
 
-    except Exception as e:
-        print("Database error",e)
+    except mysql.connector.Error as e:
+        print("Database error:", e)
 
 user_register()
