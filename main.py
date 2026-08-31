@@ -10,7 +10,7 @@ def user_register():
         pwd = input("Enter your password: ")
         role = input("Enter your Role: ")
 
-        if len(pwd) > 8:
+        if len(pwd) < 8:
             raise ValueError("The Password should have 8 letters... ")
         
         if not email.endswith("@gmail.com"):
@@ -29,13 +29,32 @@ def user_register():
         cursor.execute(query,(name,email,pwd,role))
         conn.commit()
 
-
     except ValueError as e:
-        print("Error",e)
-
-    
+        print("Error",e)   
 
     except mysql.connector.Error as e:
         print("Database error:", e)
 
-user_register()
+
+
+def user_login():
+    email = input("Enter Your email: ")
+    pwd = input("Enter Your password:  ")
+
+    query = """
+            SELECT user_id FROM
+            users WHERE  email = %s and password = %s"""
+
+    cursor.execute(query,(email,pwd))
+
+    user_id = cursor.fetchone()
+
+    if user_id:
+        print("Login Successfull..")
+        print("User Id: ",user_id[0])
+
+    else:
+        print("Email or Password is wrong..")
+
+
+user_login()
