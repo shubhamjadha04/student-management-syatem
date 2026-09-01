@@ -1,104 +1,12 @@
-from database import cursor,conn
-import mysql.connector
 from auth import user_login,user_register
+from student import(
+    add_student,
+    view_student,
+    search_student,
+    delete_student,
+    update_student,
+)
 
-
-
-# # user register function
-# def user_register():
-#     try:      
-#         name =input("Enter your Name: ")
-#         email = input("Enter your Email: ")
-#         print("Password should have 8 letters...")
-#         pwd = input("Enter your password: ")
-#         role = input("Enter your Role: ").lower()
-
-#         if len(pwd) < 8:
-#             raise ValueError("The Password should have 8 letters... ")
-        
-#         if not email.endswith("@gmail.com"):
-#             raise ValueError ("Enter valid Email.")
-
-#         if role not in ('student', "admin"):
-#             raise ValueError ("Enter Valid Role..")
-
-#         query = """
-#                 INSERT INTO users (name,email,password,role)
-#                 VALUES(%s,%s,%s,%s)
-#                  """
-
-#         cursor.execute(query,(name,email,pwd,role))
-#         conn.commit()
-
-#         print("You have successfully Register.")
-#         search_student()
-
-
-# # excception handling
-#     except ValueError as e:
-#         print("Error",e)   
-
-#     except mysql.connector.Error as e:
-#         print("Database error:", e)
-
-
-
-# # user login function 
-# def user_login():
-#     try:    
-#         email = input("Enter Your email: ")
-#         pwd = input("Enter Your password:  ")
-
-#         query = """
-#                 SELECT user_id FROM
-#                 users WHERE  email = %s and password = %s"""
-
-#         cursor.execute(query,(email,pwd))
-
-#         user_id = cursor.fetchone()
-
-#         if user_id:
-#             print("Login Successfull..")
-#             print("User Id: ",user_id[0])
-#             return True
-
-#         else:
-#             print("Email or Password is wrong..")
-#             return False
-
-#     except mysql.connector.Error as e:
-#         print("Database error:", e)
-
-
-# ADD STUDENT FUNCTION
-def add_student():
-    pass
-
-
-
-# VIEW STUDENT FUNCTION
-def view_student():
-    pass
-
-
-# SEARCH STUDENT FUNCTION
-def search_student():
-    pass
-
-
-# UPDATE STUDENT FUNCTION
-def updat_student():
-    pass
-
-
-# DELETE STUDENT FUNCTION
-def delete_student():
-    pass
-
-
-# LOGOUT STUDENT FUNCTION
-def logout_student():
-    pass
 
 # the student menu function
 
@@ -128,13 +36,14 @@ def student_menu(user_id):
             search_student()
 
         elif choice == "4":
-            updat_student()
+            update_student()
 
         elif choice == "5":
             delete_student()
 
         elif choice == "6":
-            logout_student()
+            print("You have successfully logout..")
+            break
 
         elif choice == "7":
             print("Exit...")
