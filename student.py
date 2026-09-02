@@ -1,25 +1,23 @@
 
-# ADD STUDENT FUNCTION
-def add_student():
+# view_courses FUNCTION
+def view_courses():
     pass
 
 
 
-# VIEW STUDENT FUNCTION
-def view_student():
+# view_profile FUNCTION
+def view_profile():
     pass
 
 
-# SEARCH STUDENT FUNCTION
-def search_student():
+# view_marks FUNCTION
+def view_marks():
     pass
 
 
-# UPDATE STUDENT FUNCTION
-def update_student():
+# view_attendance FUNCTION
+def view_attendance():
     pass
 
 
-# DELETE STUDENT FUNCTION
-def delete_student():
-    pass
+

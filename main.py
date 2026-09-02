@@ -1,10 +1,9 @@
 from auth import user_login,user_register
 from student import(
-    add_student,
-    view_student,
-    search_student,
-    delete_student,
-    update_student,
+    view_attendance,
+    view_courses,
+    view_marks,
+    view_profile,
 )
 from admin import(
     add_student,
@@ -74,44 +73,39 @@ def admin_menu(user_id):
 def student_menu(user_id):
 
     while True:
-        print("\n"+ "=" *35)
-        print(" STUDENT MANAGEMENT SYSTEM. ")
-        print("="*35)
-        print("1. Add Student.")
-        print("2. View all student.")
-        print("3. Search Student. ")
-        print("4. Update Student.")
-        print("5. Delete Student.")
-        print("6. Logout.")
-        print("7. Exit")
 
-        choice = input("Enter Your Choice: ")
+        print("\n" + "=" * 40)
+        print("          STUDENT MENU")
+        print("=" * 40)
+
+        print("1. View Profile")
+        print("2. View Courses")
+        print("3. View Marks")
+        print("4. View Attendance")
+        print("5. Logout")
+
+        print("=" * 40)
+
+        choice = input("Enter your choice: ")
 
         if choice == "1":
-            add_student()
+            view_profile(user_id)
 
         elif choice == "2":
-            view_student()
+            view_courses(user_id)
 
         elif choice == "3":
-            search_student()
+            view_marks(user_id)
 
         elif choice == "4":
-            update_student()
+            view_attendance(user_id)
 
         elif choice == "5":
-            delete_student()
-
-        elif choice == "6":
-            print("You have successfully logout..")
-            break
-
-        elif choice == "7":
-            print("Exit...")
+            print("Logged out successfully.")
             break
 
         else:
-            print("INVALID OPTION SELECTED.")
+            print("Invalid choice. Please try again.")
 
 
 # the register and the login menu:
