@@ -6,14 +6,67 @@ from student import(
     delete_student,
     update_student,
 )
-# from admin import(
+from admin import(
+    add_student,
+    add_course,
+    delete_student,
+    update_student,
+    manage_attendance,
+    manage_marks,
+    reports,
 
-# )
+)
 
 # the admin menu function
 
 def admin_menu(user_id):
-    pass
+
+    while True:
+        print("\n" + "=" * 40)
+        print("          ADMIN MENU")
+        print("=" * 40)
+
+        print("1. Add Student")
+        print("2. Update Student")
+        print("3. Delete Student")
+        print("4. Add Course")
+        print("5. Manage Marks")
+        print("6. Manage Attendance")
+        print("7. Reports")
+        print("8. Logout")
+
+        print("=" * 40)
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            add_student()
+
+        elif choice == "2":
+            update_student()
+
+        elif choice == "3":
+            delete_student()
+
+        elif choice == "4":
+            add_course()
+
+        elif choice == "5":
+            manage_marks()
+
+        elif choice == "6":
+            manage_attendance()
+
+        elif choice == "7":
+            reports()
+
+        elif choice == "8":
+            print("Logged out successfully.")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+            
 
 
 # the student menu function
