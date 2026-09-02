@@ -8,7 +8,7 @@ def user_register():
         email = input("Enter your Email: ")
         print("Password should have 8 letters...")
         pwd = input("Enter your password: ")
-        role = input("Enter your Role: ").lower()
+        
 
         if len(pwd) < 8:
             raise ValueError("The Password should have 8 letters... ")
@@ -27,7 +27,7 @@ def user_register():
         
 
 
-        cursor.execute(query,(name,email,pwd,role))
+        cursor.execute(query,(name,email,pwd,"student"))
         conn.commit()
 
         user_id = cursor.lastrowid
