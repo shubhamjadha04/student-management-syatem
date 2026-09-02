@@ -1,4 +1,4 @@
-from auth import user_login,user_register
+from auth import admin_login,student_login
 from student import(
     view_attendance,
     view_courses,
@@ -18,7 +18,7 @@ from admin import(
 
 # the admin menu function
 
-def admin_menu(user_id):
+def admin_menu(admin_id):
 
     while True:
         print("\n" + "=" * 40)
@@ -112,31 +112,28 @@ def student_menu(user_id):
 
 while True:
     print("----Welcome to the Student Management System----")
-    print("\n1. Register.")
-    print("2. Login.")
+    print("\n1 Admin login.")
+    print("2. Student Login.")
     print("3. To Exit.")
 
     choice = input("Enter your choice: ")
 
     if choice == "1":
-        user = user_register()
-        user_id , role = user
-        if role == "admin":
-            admin_menu(user_id)
+        admin_id = admin_login()
+        if admin_id:
+            admin_menu(admin_id)
 
-        elif role == "student":
-            student_menu(user_id)
+        
             
 
     elif choice == "2":
-        user = user_login()
-        user_id,role = user
+        student_id = student_login()
+        if student_id:
+            student_menu(student_id)
 
-        if role == "admin":
-            admin_menu(user_id)
 
-        elif role == "student":
-            student_menu(user_id)
+
+        
         
     elif choice == "3":
         print("Thank you..\nExit")

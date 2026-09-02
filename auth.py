@@ -1,45 +1,46 @@
 from database import cursor,conn
 import mysql.connector
+import re
 
-# user register function
-def user_register():
-    try:      
-        name =input("Enter your Name: ")
-        email = input("Enter your Email: ")
-        print("Password should have 8 letters...")
-        pwd = input("Enter your password: ")
-        role = input("Enter the role: ").lower()
-        
 
-        if len(pwd) < 8:
-            raise ValueError("The Password should have 8 letters... ")
-        
-        if not email.endswith("@gmail.com"):
-            raise ValueError ("Enter valid Email.")
+# validate_email fuction
+def validate_email(email):
+    pattern = r'^[A-Za-z0-9._%+-]+@gmail\.com$'
+    return re.match(pattern, email)
 
-        if role not in ('student', "admin"):
-            raise ValueError ("Enter Valid Role..")
+
+# email present function
+def email_exists(email):
+    query = "SELECT 1 FROM users WHERE email = %s"
+    cursor.execute(query, (email,))
+    return cursor.fetchone() is not None
+
+
+# user login function 
+def admin_login():
+    try:    
+        email = input("Enter Your email: ")
+        pwd = input("Enter Your password:  ")
 
         query = """
-                INSERT INTO users (name,email,password,role)
-                VALUES(%s,%s,%s,%s)
-                 """
+                SELECT user_id FROM
+                users WHERE  email = %s and password = %s and role = 'admin'
+                """
 
-    
-        cursor.execute(query,(name,email,pwd,role))
-        conn.commit()
+        cursor.execute(query,(email,pwd))
 
-        user_id = cursor.lastrowid
+        user= cursor.fetchone()
 
-        print("You have successfully Register.")
-        return user_id, role
-        
+        if user:
+            user_id = user[0]
+            
+            print("Login Successfull..")
+            print("Your user id is ",user_id)
+            return user_id
 
-
-# excception handling
-    except ValueError as e:
-        print("Error",e)   
-        return None
+        else:
+            print("Email or Password is wrong..")
+            return None
 
     except mysql.connector.Error as e:
         print("Database error:", e)
@@ -47,25 +48,26 @@ def user_register():
 
 
 
-# user login function 
-def user_login():
+
+def student_login():
     try:    
         email = input("Enter Your email: ")
         pwd = input("Enter Your password:  ")
 
         query = """
-                SELECT user_id,role FROM
-                users WHERE  email = %s and password = %s"""
+                SELECT user_id FROM
+                users WHERE  email = %s and password = %s  and role = 'student'
+                 """
 
         cursor.execute(query,(email,pwd))
 
         user = cursor.fetchone()
-
         if user:
             user_id = user[0]
-            role = user[1]
             print("Login Successfull..")
-            return user_id,role
+            print("Your user id is ",user_id)
+            return user_id
+
 
         else:
             print("Email or Password is wrong..")
