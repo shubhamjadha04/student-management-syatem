@@ -8,6 +8,7 @@ def user_register():
         email = input("Enter your Email: ")
         print("Password should have 8 letters...")
         pwd = input("Enter your password: ")
+        role = input("Enter the role: ").lower()
         
 
         if len(pwd) < 8:
@@ -24,16 +25,14 @@ def user_register():
                 VALUES(%s,%s,%s,%s)
                  """
 
-        
-
-
-        cursor.execute(query,(name,email,pwd,"student"))
+    
+        cursor.execute(query,(name,email,pwd,role))
         conn.commit()
 
         user_id = cursor.lastrowid
 
         print("You have successfully Register.")
-        return user_id
+        return user_id, role
         
 
 
@@ -55,17 +54,18 @@ def user_login():
         pwd = input("Enter Your password:  ")
 
         query = """
-                SELECT user_id FROM
+                SELECT user_id,role FROM
                 users WHERE  email = %s and password = %s"""
 
         cursor.execute(query,(email,pwd))
 
-        user_id = cursor.fetchone()
+        user = cursor.fetchone()
 
-        if user_id:
+        if user:
+            user_id = user[0]
+            role = user[1]
             print("Login Successfull..")
-            print("User Id: ",user_id[0])
-            return user_id[0]
+            return user_id,role
 
         else:
             print("Email or Password is wrong..")

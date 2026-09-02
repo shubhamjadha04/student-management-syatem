@@ -6,6 +6,14 @@ from student import(
     delete_student,
     update_student,
 )
+# from admin import(
+
+# )
+
+# the admin menu function
+
+def admin_menu(user_id):
+    pass
 
 
 # the student menu function
@@ -65,15 +73,24 @@ while True:
 
     if choice == "1":
         user = user_register()
-        if user:
-            student_menu(user)
+        user_id , role = user
+        if role == "admin":
+            admin_menu(user_id)
+
+        elif role == "student":
+            student_menu(user_id)
+            
 
     elif choice == "2":
         user = user_login()
-        if user:
-            student_menu(user)
-        
+        user_id,role = user
 
+        if role == "admin":
+            admin_menu(user_id)
+
+        elif role == "student":
+            student_menu(user_id)
+        
     elif choice == "3":
         print("Thank you..\nExit")
         break
