@@ -18,7 +18,7 @@ from admin import(
 
 # the admin menu function
 
-def admin_menu(admin_id):
+def admin_menu():
 
     while True:
         print("\n" + "=" * 40)
@@ -121,7 +121,7 @@ while True:
     if choice == "1":
         admin_id = admin_login()
         if admin_id:
-            admin_menu(admin_id)
+            admin_menu()
 
         
             

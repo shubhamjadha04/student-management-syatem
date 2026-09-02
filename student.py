@@ -6,7 +6,7 @@ def view_courses():
 
 
 # view_profile FUNCTION
-def view_profile():
+def view_profile(user_id):
     pass
 
 
