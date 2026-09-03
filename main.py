@@ -122,19 +122,12 @@ while True:
         admin_id = admin_login()
         if admin_id:
             admin_menu()
-
-        
-            
-
+ 
     elif choice == "2":
         student_id = student_login()
         if student_id:
             student_menu(student_id)
-
-
-
-        
-        
+   
     elif choice == "3":
         print("Thank you..\nExit")
         break

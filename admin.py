@@ -25,6 +25,7 @@ def add_student_detail(user_id):
     conn.commit()
     print("The details addes successfully.")
 
+
 # this is the admin menu 
 
 def add_student():
@@ -59,9 +60,7 @@ def add_student():
         add_student_detail(user_id)
         
         
-
-
-
+# exception handling
     except ValueError as e:
         print("Error",e)
         return None
@@ -69,14 +68,62 @@ def add_student():
     except mysql.connector.Error as e:
         print("Error",e)
         return None
+  
+# view all student from the users table
 
-    
+def view_all_students():
+    query = """
+        SELECT user_id, name, email
+        FROM users
+        WHERE role = 'student'
+    """
 
-    
+    cursor.execute(query)
+    students = cursor.fetchall()
 
+    print("\n========== ALL STUDENTS ==========")
+    print(f"{'ID':<10}{'NAME':<20}{'EMAIL':<30}")
+    print("-" * 60)
+
+    for student in students:
+        print(f"{student[0]:<10}{student[1]:<20}{student[2]:<30}")
+
+    print("=" * 60)
+
+
+# update_student function 
 
 def update_student():
-    pass
+    view_all_students()
+
+    user_id = input("Enter the id of the student want to update: ")
+
+    roll_no = input("Enter Roll no.: ")
+    phone = input("Enter phone no.: ")
+    address = input("Enter address: ")
+    gender = input("Enter gender: ")
+    dob = input("Enter date of birth: ")
+    branch = input("Enter Branch: ")
+    add_year =  input("Enter addimission year: ")
+    
+    
+    query = """
+                  UPDATE students 
+                  SET roll_no = %s,
+                    phone = %s,
+                    address = %s,
+                    gender= %s,
+                    dob =%s,
+                    branch = %s,
+                    admission_year = %s
+
+                WHERE user_id = %s 
+                    """
+    
+    cursor.execute(query,(roll_no,phone,address,gender,dob,branch,add_year,user_id))
+    conn.commit()
+    print("The Student details updated successfully.")
+        
 
 
 def delete_student():
