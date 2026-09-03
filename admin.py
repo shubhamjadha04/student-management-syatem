@@ -94,40 +94,87 @@ def view_all_students():
 # update_student function 
 
 def update_student():
-    view_all_students()
+    try:
+        view_all_students()
 
-    user_id = input("Enter the id of the student want to update: ")
+        user_id = input("Enter the id of the student want to update: ")
+        # checking the student is present
+        check_query = """
+            SELECT user_id
+            FROM students
+            WHERE user_id = %s
+        """
 
-    roll_no = input("Enter Roll no.: ")
-    phone = input("Enter phone no.: ")
-    address = input("Enter address: ")
-    gender = input("Enter gender: ")
-    dob = input("Enter date of birth: ")
-    branch = input("Enter Branch: ")
-    add_year =  input("Enter addimission year: ")
-    
-    
-    query = """
-                  UPDATE students 
-                  SET roll_no = %s,
-                    phone = %s,
-                    address = %s,
-                    gender= %s,
-                    dob =%s,
-                    branch = %s,
-                    admission_year = %s
+        cursor.execute(check_query, (user_id,))
+        student = cursor.fetchone()
 
-                WHERE user_id = %s 
-                    """
-    
-    cursor.execute(query,(roll_no,phone,address,gender,dob,branch,add_year,user_id))
-    conn.commit()
-    print("The Student details updated successfully.")
+        if student is None:
+            print("Student ID not found.")
+            return
+
+
+        roll_no = input("Enter Roll no.: ")
+        phone = input("Enter phone no.: ")
+        address = input("Enter address: ")
+        gender = input("Enter gender: ")
+        dob = input("Enter date of birth: ")
+        branch = input("Enter Branch: ")
+        add_year =  input("Enter addimission year: ")
+        
+        
+        query = """
+                    UPDATE students 
+                    SET roll_no = %s,
+                        phone = %s,
+                        address = %s,
+                        gender= %s,
+                        dob =%s,
+                        branch = %s,
+                        admission_year = %s
+
+                    WHERE user_id = %s 
+                        """
+        
+        cursor.execute(query,(roll_no,phone,address,gender,dob,branch,add_year,user_id))
+        conn.commit()
+        print("The Student details updated successfully.")
+
+    except mysql.connector.Error as e:
+        print("Error",e)
         
 
 
 def delete_student():
-    pass
+    try:      
+        view_all_students()
+
+        user_id = input("Enter Id of the student which you want to delete: ")
+        query1 = """
+                    DELETE FROM students 
+                    WHERE user_id = %s"""
+
+        query2 = """
+                        DELETE FROM  users
+                        WHERE user_id = %s"""
+
+    
+
+        cursor.execute(query1,(user_id,))
+
+        
+        if cursor.rowcount == 0:
+            print("Student not found.")
+            conn.rollback()
+            return
+
+        cursor.execute(query2,(user_id,))
+        conn.commit()
+
+        print("The student deleted successfully..")
+        
+    except mysql.connector.Error as e:
+        print("Error",e)
+    
 
 def add_course():
     pass

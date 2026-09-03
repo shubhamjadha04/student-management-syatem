@@ -42,7 +42,7 @@ def admin_menu():
             add_student()
 
         elif choice == "2":
-            update_student()
+            update_student()    
 
         elif choice == "3":
             delete_student()
