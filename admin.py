@@ -171,13 +171,50 @@ def delete_student():
         conn.commit()
 
         print("The student deleted successfully..")
-        
+
     except mysql.connector.Error as e:
         print("Error",e)
     
-
+# add add_course function
 def add_course():
-    pass
+    try:
+        course_name = input("Enter the course name: ")
+        course_code = input("Enter the course code: ")
+
+        # checking ciurse code 
+        check_code = """SELECT course_name 
+                        FROM courses WHERE
+                        course_code = %s"""
+        cursor.execute(check_code,(course_code,))
+        check = cursor.fetchone()
+
+        if check:
+            print("course code alrady exists.")
+            return
+
+        credits = int(input("Enter the credits: "))
+
+        if credits < 0:
+            raise ValueError("Credits must be greater than 0.")
+
+        query = """
+                   INSERT INTO courses(course_name,course_code,credits)
+                   VALUES(%s,%s,%s)                     
+                """
+
+        cursor.execute(query,(course_name,course_code,credits))
+        conn.commit()
+
+        print("The course added succeffully..")
+
+
+    except ValueError:
+        print("The credits must be numbers.")
+
+    except mysql.connector.Error as e:
+        conn.rollback()
+        print("Error",e)
+
 
 
 def manage_marks():
