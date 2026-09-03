@@ -217,7 +217,7 @@ def add_course():
 
 
 
-def manage_marks():
+def add_teacher():
     pass
 
 def manage_attendance():

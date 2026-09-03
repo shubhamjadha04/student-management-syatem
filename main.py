@@ -11,7 +11,7 @@ from admin import(
     delete_student,
     update_student,
     manage_attendance,
-    manage_marks,
+    add_teacher,
     reports,
 
 )
@@ -29,10 +29,14 @@ def admin_menu():
         print("2. Update Student")
         print("3. Delete Student")
         print("4. Add Course")
-        print("5. Manage Marks")
-        print("6. Manage Attendance")
-        print("7. Reports")
-        print("8. Logout")
+        print("5. Add Teacher")
+        print("6. Update Teacher")
+        print("7. Delete Teacher")
+        print("8. Assign Teacher")
+        print("9. Enroll course")
+        print("10. Logout")
+
+        
 
         print("=" * 40)
 
@@ -51,7 +55,7 @@ def admin_menu():
             add_course()
 
         elif choice == "5":
-            manage_marks()
+            add_teacher()
 
         elif choice == "6":
             manage_attendance()
@@ -59,7 +63,7 @@ def admin_menu():
         elif choice == "7":
             reports()
 
-        elif choice == "8":
+        elif choice == "10  ":
             print("Logged out successfully.")
             break
 
