@@ -10,9 +10,9 @@ from admin import(
     add_course,
     delete_student,
     update_student,
-    manage_attendance,
+    update_teacher,
+    delete_teacher,
     add_teacher,
-    reports,
 
 )
 
@@ -58,12 +58,15 @@ def admin_menu():
             add_teacher()
 
         elif choice == "6":
-            manage_attendance()
+            update_teacher()
 
         elif choice == "7":
-            reports()
+            delete_teacher()
 
-        elif choice == "10  ":
+        elif choice == "8":
+            pass
+
+        elif choice == "10":
             print("Logged out successfully.")
             break
 

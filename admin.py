@@ -143,7 +143,7 @@ def update_student():
         print("Error",e)
         
 
-
+# DELETE STUDENT FUNCTION
 def delete_student():
     try:      
         view_all_students()
@@ -217,12 +217,164 @@ def add_course():
 
 
 
+# ADD TEACHER EXTRA INFO
+def teacher_info(user_id):
+    teacher_name = input("Enter the name of the teacher: ")
+    phone = input("Enter the phone no: ")
+    branch = input("Enter the branch: ")
+    
+    teach_query = """
+                            INSERT INTO teachers(user_id,teacher_name,phone,branch)
+                            VALUES(%s,%s,%s,%s)"""
+    
+    cursor.execute(teach_query,(user_id,teacher_name,phone,branch))
+    conn.commit()
+    
+    t_id = cursor.lastrowid
+    print("Teacher detail added successfully teacher_id is",t_id)
+
+# add teacher function
 def add_teacher():
-    pass
+    try:
+        name =input("Enter your Name: ")
+        email = input("Enter your Email: ")
+            
+        # valid emia; check
+        if not validate_email(email):
+            raise ValueError ("Enter valid Email.")
+                    
+        # email already present check
+        if email_exists(email):
+            raise ValueError ("Email Already exists..")
+            
+        print("Password must have at least 8 characters.")
+        pwd = input("Enter your password: ")
+            
+        # validate the password
+        if len(pwd) < 8:
+            raise ValueError("The Password should have 8 letters... ")
+    
+        query = """
+                        INSERT INTO users(name,email,password,role)
+                        VALUES(%s,%s,%s,%s)
+                    """
+        cursor.execute(query,(name,email,pwd,'teacher'))
+        conn.commit()
+    
+        user_id = cursor.lastrowid
+        print("Student added Successfully..\n add other details.")
+        teacher_info(user_id)
 
-def manage_attendance():
-    pass
+            
+            
+    # exception handling
+    except ValueError as e:
+        print("Error",e)
+        return None
+    
+    except mysql.connector.Error as e:
+        print("Error",e)
+        return None
+
+#  VIEW ALL TEACHER FUNCTION
+def view_all_teachers():
+    query = """
+        SELECT user_id, name, email
+        FROM users
+        WHERE role = 'teacher'
+    """
+
+    cursor.execute(query)
+    teachers = cursor.fetchall()
+
+    print("\n========== ALL TEACHERS ==========")
+    print(f"{'ID':<10}{'NAME':<20}{'EMAIL':<30}")
+    print("-" * 60)
+
+    for teacher in teachers:
+        print(f"{teacher[0]:<10}{teacher[1]:<20}{teacher[2]:<30}")
+
+    print("=" * 60)
 
 
-def reports():
-    pass
+
+    
+# UPDATE TEACHER FUNCTION
+def update_teacher():
+    try:
+        view_all_teachers()
+
+        user_id = input("Enter the ID of the teacher you want to update: ")
+
+        # Check whether teacher exists
+        check_query = """
+            SELECT teacher_id
+            FROM teachers
+            WHERE user_id = %s
+        """
+
+        cursor.execute(check_query, (user_id,))
+        teacher = cursor.fetchone()
+
+        if teacher is None:
+            print("Teacher ID not found.")
+            return
+
+        teacher_name = input("Enter the name of the teacher: ")
+        phone = input("Enter phone no.: ")
+        branch = input("Enter Branch: ")
+
+        query = """
+            UPDATE teachers
+            SET teacher_name = %s,
+                phone = %s,
+                branch = %s
+            WHERE user_id = %s
+        """
+
+        cursor.execute(
+            query,
+            (teacher_name, phone, branch, user_id)
+        )
+
+        conn.commit()
+
+        print("The teacher details updated successfully.")
+
+    except mysql.connector.Error as e:
+        print("Error:", e)
+
+
+
+# DELETE TEACHER FUNCTION
+
+def delete_teacher():
+    try:      
+        view_all_teachers()
+
+        user_id = input("Enter Id of the Teacher which you want to delete: ")
+        query1 = """
+                    DELETE FROM teachers 
+                    WHERE user_id = %s"""
+
+        query2 = """
+                        DELETE FROM  users
+                        WHERE user_id = %s"""
+
+    
+
+        cursor.execute(query1,(user_id,))
+
+        
+        if cursor.rowcount == 0:
+            print("Teacher not found.")
+            conn.rollback()
+            return
+
+        cursor.execute(query2,(user_id,))
+        conn.commit()
+
+        print("The teacher deleted successfully..")
+
+    except mysql.connector.Error as e:
+        print("Error",e)
