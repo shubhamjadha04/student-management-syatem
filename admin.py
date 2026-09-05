@@ -181,7 +181,7 @@ def add_course():
         course_name = input("Enter the course name: ")
         course_code = input("Enter the course code: ")
 
-        # checking ciurse code 
+        # checking course code 
         check_code = """SELECT course_name 
                         FROM courses WHERE
                         course_code = %s"""
@@ -279,20 +279,19 @@ def add_teacher():
 #  VIEW ALL TEACHER FUNCTION
 def view_all_teachers():
     query = """
-        SELECT user_id, name, email
-        FROM users
-        WHERE role = 'teacher'
+        SELECT teacher_id, teacher_name,branch
+        FROM teachers
     """
 
     cursor.execute(query)
     teachers = cursor.fetchall()
 
     print("\n========== ALL TEACHERS ==========")
-    print(f"{'ID':<10}{'NAME':<20}{'EMAIL':<30}")
+    print(f"{'ID':<10}{'NAME':<20}{'BRANCH':<20}")
     print("-" * 60)
 
     for teacher in teachers:
-        print(f"{teacher[0]:<10}{teacher[1]:<20}{teacher[2]:<30}")
+        print(f"{teacher[0]:<10}{teacher[1]:<20}{teacher[2]:<20}")
 
     print("=" * 60)
 
@@ -378,3 +377,98 @@ def delete_teacher():
 
     except mysql.connector.Error as e:
         print("Error",e)
+
+
+#checking all the courses
+def show_course():
+    query = """
+             SELECT course_id, course_name,course_code, credits
+             FROM courses                   
+            """ 
+    cursor.execute(query,())
+    courses= cursor.fetchall()
+    print("\n========== ALL COURSES ==========")
+    print(f"{'ID':<10}{'NAME':<20}{'COURSE_CODE':<30}{'CREDITS':<20}")
+    print("-" * 60)
+    
+    for course in courses:
+        print(f"{course[0]:<10}{course[1]:<20}{course[2]:<30}{course[3]:<20}")
+    
+    print("=" * 60)
+
+
+
+# teacher assign function 
+def assign_teacher():
+    try:
+        view_all_teachers()
+
+        teacher_id = input("Enter the teacher id: ")
+
+        show_course()
+
+        course_id = input("Enter the course id: ")
+
+         # Check teacher exists
+        query = """
+            SELECT teacher_id
+            FROM teachers
+            WHERE teacher_id = %s
+        """
+
+        cursor.execute(query, (teacher_id,))
+        teacher = cursor.fetchone()
+
+        if not teacher:
+            print("Teacher does not exist.")
+            return
+
+         # Check course exists
+        query = """
+            SELECT course_id
+            FROM courses
+            WHERE course_id = %s
+        """
+
+        cursor.execute(query, (course_id,))
+        course = cursor.fetchone()
+
+        if not course:
+            print("Course does not exist.")
+            return
+
+        # check weather the course is assigned or not 
+        query = """
+            SELECT teacher_id
+            FROM teacher_course
+            WHERE teacher_id = %s AND course_id = %s
+        """
+
+        cursor.execute(query, (teacher_id, course_id))
+        assignment = cursor.fetchone()
+
+        if assignment:
+            print("This teacher is already assigned to this course.")
+            return
+
+        query = """
+                    INSERT INTO teacher_course(teacher_id,course_id)
+                    VALUES(%s,%s)"""
+
+        cursor.execute(query,(teacher_id,course_id))
+        conn.commit()
+
+        print("The course is assigned successfully.")
+
+
+
+    except mysql.connector.Error as e:
+        conn.rollback()
+        print("Error",e)
+
+    except validate_email:
+        print("Invalid teacher_id or course_id..")
+        
+
+        
+

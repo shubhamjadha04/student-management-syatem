@@ -13,6 +13,7 @@ from admin import(
     update_teacher,
     delete_teacher,
     add_teacher,
+    assign_teacher,
 
 )
 
@@ -64,7 +65,7 @@ def admin_menu():
             delete_teacher()
 
         elif choice == "8":
-            pass
+            assign_teacher()
 
         elif choice == "10":
             print("Logged out successfully.")
