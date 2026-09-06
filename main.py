@@ -13,7 +13,7 @@ from admin import(
     update_teacher,
     delete_teacher,
     add_teacher,
-    assign_teacher,
+    assign_course,
     enrolle_course,
 
 )
@@ -75,7 +75,7 @@ def admin_menu(admin_id):
             delete_teacher()
 
         elif choice == "8":
-            assign_teacher()
+            assign_course()
 
         elif choice == "9":
             enrolle_course()
@@ -172,7 +172,7 @@ while True:
     print("\n1 Admin login.")
     print("2. Student Login.")
     print("3. Teacher login.")
-    print("3. To Exit.")
+    print("4. To Exit.")
 
     choice = input("Enter your choice: ")
 
@@ -190,6 +190,9 @@ while True:
         teacher_id = teacher_login()
         if teacher_id:
             teacher_menu(teacher_id)
+    elif choice == "4":
+        print("Logout successfully..")
+        break
         
 
     else:

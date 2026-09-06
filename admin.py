@@ -400,7 +400,7 @@ def show_course():
 
 
 # teacher assign function 
-def assign_teacher():
+def assign_course():
     try:
         view_all_teachers()
 
@@ -440,16 +440,16 @@ def assign_teacher():
 
         # check weather the course is assigned or not 
         query = """
-            SELECT teacher_id
+            SELECT course_id
             FROM teacher_course
-            WHERE teacher_id = %s AND course_id = %s
+            WHERE course_id = %s
         """
 
-        cursor.execute(query, (teacher_id, course_id))
+        cursor.execute(query, (course_id,))
         assignment = cursor.fetchone()
 
         if assignment:
-            print("This teacher is already assigned to this course.")
+            print("This course is already assigned to teacher.")
             return
 
         query = """

@@ -40,7 +40,7 @@ def teacher_profile(user_id):
 
 
 # view my ourses
-def view_my_courses(teacher_id):
+def view_my_courses(user_id):
     try:
         query = """
             SELECT 
@@ -88,7 +88,60 @@ def view_my_courses(teacher_id):
 
 #  view enrolled students
 def view_enrolled_students(teacher_id):
-    pass
+    try:
+        query = """
+            SELECT
+                s.student_id,
+                su.name,
+                su.email,
+                c.course_name
+            FROM users u
+
+            JOIN teachers t
+                ON u.user_id = t.user_id
+
+            JOIN teacher_course tc
+                ON t.teacher_id = tc.teacher_id
+
+            JOIN courses c
+                ON tc.course_id = c.course_id
+
+            JOIN enrollments e
+                ON c.course_id = e.course_id
+
+            JOIN students s
+                ON e.student_id = s.student_id
+
+            JOIN users su
+                ON s.user_id = su.user_id
+
+            WHERE u.user_id = %s
+            ORDER BY c.course_name, su.name
+        """
+
+        cursor.execute(query, (teacher_id,))
+        students = cursor.fetchall()
+
+        if not students:
+            print("\nNo students are enrolled in your courses.")
+            return
+
+        print("\n==================== MY STUDENTS ====================")
+        print(f"{'ID':<10}{'NAME':<20}{'EMAIL':<30}{'COURSE':<20}")
+        print("-" * 80)
+
+        for student in students:
+            print(
+                f"{student[0]:<10}"
+                f"{student[1]:<20}"
+                f"{student[2]:<30}"
+                f"{student[3]:<20}"
+            )
+
+        print("=" * 80)
+
+    except mysql.connector.Error as e:
+        print("Error:", e)
 
 
 # marks menu
