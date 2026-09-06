@@ -47,8 +47,37 @@ def admin_login():
         return None
 
 
+# teacher login
+def teacher_login():
+    try:    
+        email = input("Enter Your email: ")
+        pwd = input("Enter Your password:  ")
+        
+        query = """
+                        SELECT user_id FROM
+                        users WHERE  email = %s and password = %s and role = 'teacher'
+                        """
+        
+        cursor.execute(query,(email,pwd))
+        
+        user= cursor.fetchone()
+        
+        if user:
+            user_id = user[0]
+                    
+            print("Login Successfull..")
+            print("Your user id is ",user_id)
+            return user_id
+        
+        else:
+            print("Email or Password is wrong..")
+            return None
+        
+    except mysql.connector.Error as e:
+        print("Database error:", e)
+        return None
 
-
+# student login 
 def student_login():
     try:    
         email = input("Enter Your email: ")

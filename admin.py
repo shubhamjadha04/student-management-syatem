@@ -14,8 +14,7 @@ def add_student_detail(user_id):
     dob = input("Enter date of birth: ")
     branch = input("Enter Branch: ")
     add_year =  input("Enter addimission year: ")
-
-
+    
     query = """
               INSERT INTO students(user_id,roll_no,phone,address, gender, dob, branch, admission_year)
               VALUES(%s,%s,%s,%s,%s,%s,%s,%s)  

@@ -1,4 +1,4 @@
-from auth import admin_login,student_login
+from auth import admin_login,student_login,teacher_login
 from student import(
     view_attendance,
     view_courses,
@@ -18,9 +18,18 @@ from admin import(
 
 )
 
+from teacher import(
+    teacher_profile,
+    view_enrolled_students,
+    marks_menu,
+    attendance_menu,
+    view_my_courses,
+
+)
+
 # the admin menu function
 
-def admin_menu():
+def admin_menu(admin_id):
 
     while True:
         print("\n" + "=" * 40)
@@ -36,8 +45,7 @@ def admin_menu():
         print("7. Delete Teacher")
         print("8. Assign Teacher")
         print("9. Enroll course")
-        print("10 Reports")
-        print("11. Logout")
+        print("10. Logout")
 
         
 
@@ -73,15 +81,48 @@ def admin_menu():
             enrolle_course()
 
         elif choice == "10":
-            pass
-
-        elif choice == "11":
             print("Logged out successfully.")
             break
 
         else:
             print("Invalid choice. Please try again.")
             
+# teacher menu function 
+def teacher_menu(teacher_id):
+    while True:
+        print("\n========== TEACHER MENU ==========")
+        print("1. View My Profile")
+        print("2. View My Courses")
+        print("3. View Enrolled Students")
+        print("4. Manage Marks")
+        print("5. Manage Attendance")
+        print("6. Logout")
+        print("==================================")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            teacher_profile(teacher_id)
+
+        elif choice == "2":
+            view_my_courses(teacher_id)
+
+        elif choice == "3":
+            view_enrolled_students(teacher_id)
+
+        elif choice == "4":
+            marks_menu(teacher_id)
+
+        elif choice == "5":
+            attendance_menu(teacher_id)
+
+        elif choice == "6":
+            print("Logging out...")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
 
 
 # the student menu function
@@ -130,6 +171,7 @@ while True:
     print("----Welcome to the Student Management System----")
     print("\n1 Admin login.")
     print("2. Student Login.")
+    print("3. Teacher login.")
     print("3. To Exit.")
 
     choice = input("Enter your choice: ")
@@ -137,7 +179,7 @@ while True:
     if choice == "1":
         admin_id = admin_login()
         if admin_id:
-            admin_menu()
+            admin_menu(admin_id)
  
     elif choice == "2":
         student_id = student_login()
@@ -145,8 +187,10 @@ while True:
             student_menu(student_id)
    
     elif choice == "3":
-        print("Thank you..\nExit")
-        break
+        teacher_id = teacher_login()
+        if teacher_id:
+            teacher_menu(teacher_id)
+        
 
     else:
         print("Invalid Option. ")
