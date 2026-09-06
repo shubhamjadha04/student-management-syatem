@@ -4,6 +4,13 @@ from auth import(
     validate_email,
     email_exists,
 )
+from marks import(
+    add_marks,
+    update_marks,
+    view_marks,
+)
+
+
 # view profile
 def teacher_profile(user_id):
     try:
@@ -146,7 +153,30 @@ def view_enrolled_students(teacher_id):
 
 # marks menu
 def marks_menu(teacher_id):
-    pass
+    while True:
+
+        print("""
+1. Add markd   
+2. Update marks
+3. View marks
+4. Exit
+
+             """)
+
+        choice = input("Enter Your choice: ")
+
+        if choice == "1":
+            add_marks(teacher_id)
+
+        elif choice == "2":
+            update_marks(teacher_id)
+
+        elif choice == "3":
+            view_marks(teacher_id)
+
+        elif choice == "4":
+            break
+
 
 
 # attendence menu

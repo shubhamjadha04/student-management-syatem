@@ -5,3 +5,13 @@ from auth import(
     email_exists,
 )
 
+
+def add_marks(teacher_id):
+    pass
+
+
+def update_marks(teacher_id):
+    pass
+
+def view_marks(teacher_id):
+    pass
