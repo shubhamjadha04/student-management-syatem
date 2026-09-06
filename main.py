@@ -14,6 +14,7 @@ from admin import(
     delete_teacher,
     add_teacher,
     assign_teacher,
+    enrolle_course,
 
 )
 
@@ -35,7 +36,8 @@ def admin_menu():
         print("7. Delete Teacher")
         print("8. Assign Teacher")
         print("9. Enroll course")
-        print("10. Logout")
+        print("10 Reports")
+        print("11. Logout")
 
         
 
@@ -67,7 +69,13 @@ def admin_menu():
         elif choice == "8":
             assign_teacher()
 
+        elif choice == "9":
+            enrolle_course()
+
         elif choice == "10":
+            pass
+
+        elif choice == "11":
             print("Logged out successfully.")
             break
 

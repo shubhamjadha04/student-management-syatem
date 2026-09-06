@@ -73,8 +73,9 @@ def add_student():
 
 def view_all_students():
     query = """
-        SELECT user_id, name, email
-        FROM users
+        SELECT s.student_id, u.name, s.branch, s.admission_year
+        FROM users u join students s on 
+        u.user_id = s.user_id
         WHERE role = 'student'
     """
 
@@ -82,13 +83,14 @@ def view_all_students():
     students = cursor.fetchall()
 
     print("\n========== ALL STUDENTS ==========")
-    print(f"{'ID':<10}{'NAME':<20}{'EMAIL':<30}")
+    print(f"{'ID':<10}{'NAME':<20}{'BRANCH':<20}{'YEAR':<10}")
     print("-" * 60)
 
     for student in students:
-        print(f"{student[0]:<10}{student[1]:<20}{student[2]:<30}")
+        print(f"{student[0]:<10}{student[1]:<20}{student[2]:<20}{student[3]:<10}")
 
     print("=" * 60)
+
 
 
 # update_student function 
@@ -460,15 +462,87 @@ def assign_teacher():
 
         print("The course is assigned successfully.")
 
+    except mysql.connector.Error as e:
+        conn.rollback()
+        print("Error",e)
+
+    except ValueError:
+        print("Invalid teacher_id or course_id..")
+
+
+        
+# Enroll the course function 
+def enrolle_course():
+    try:
+        view_all_students()
+
+        student_id = input("Enter the ID: ")
+
+        
+        #  checking if the student exists
+        query = """
+                    SELECT student_id 
+                    FROM students
+                    WHERE student_id = %s
+                    """
+
+        cursor.execute(query,(student_id,))
+        student = cursor.fetchone()
+
+        if not student:
+            print("The student does not Exists..")
+            return
+
+        show_course()
+
+        course_id = input("Enter course ID: ")
+
+
+        # Check course exists
+        query = """
+                    SELECT course_id
+                    FROM courses
+                    WHERE course_id = %s
+                """
+        
+        cursor.execute(query, (course_id,))
+        course = cursor.fetchone()
+        
+        if not course:
+            print("Course does not exist.")
+            return
+
+
+        # checking if already enrolled 
+        query = """
+                SELECT student_id , course_id 
+                FROM enrollments
+                WHERE student_id = %s 
+                AND course_id = %s"""
+
+        cursor.execute(query,(student_id,course_id))
+        enrolled = cursor.fetchone()
+
+        if enrolled:
+            print("Already Enrolled.")
+            return
+
+        # enrolling student
+        query = """
+                    INSERT INTO enrollments(student_id,course_id)
+                    VALUES(%s,%s)"""
+
+        cursor.execute(query,(student_id,course_id))
+        conn.commit()
+
+        print("Course enrolled successfully.")
 
 
     except mysql.connector.Error as e:
         conn.rollback()
         print("Error",e)
 
-    except validate_email:
-        print("Invalid teacher_id or course_id..")
-        
+    except ValueError:
+            print("Invalid student_id or course_id..")
 
-        
-
+    
