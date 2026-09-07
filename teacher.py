@@ -213,8 +213,92 @@ def add_marks(user_id):
     except ValueError as e:
         print("Invalid Input..")
 
-add_marks(13)
      
+# update marks function
+def update_marks(user_id):
+    # to get teacher id 
+    query =  """
+                    SELECT teacher_id 
+                    from users u join
+                    teachers t
+                    on u.user_id = t.user_id
+                    where u.user_id = %s
+                    """
+    
+    cursor.execute(query,(user_id,))
+    teacher_id = cursor.fetchone()
+
+    teacher = teacher_id[0]
+
+
+    query = """
+        SELECT
+    s.student_id,
+    u.name,
+    c.course_name,
+    m.marks
+FROM teachers t
+
+JOIN marks m
+    ON t.teacher_id = m.teacher_id
+
+JOIN students s
+    ON s.student_id = m.student_id
+
+JOIN users u
+    ON u.user_id = s.user_id
+
+JOIN courses c
+    ON c.course_id = m.course_id
+
+WHERE t.teacher_id = %s;
+    """
+
+    try:
+        cursor.execute(query, (teacher,))
+        records = cursor.fetchall()
+
+        if not records:
+            print("No marks found.")
+            return
+
+        print("\n========== STUDENT MARKS ==========")
+        print(f"{'ID':<10}{'NAME':<20}{'COURSE':<25}{'MARKS':<10}")
+        print("-" * 65)
+
+        for student_id, name, course_name, marks in records:
+            print(f"{student_id:<10}{name:<20}{course_name:<25}{marks:<10}")
+
+
+
+        student_id = input("Enter student ID: ")
+
+        view_my_courses(user_id)
+
+        course_id = input("Enter the course ID: ")
+        mark = int(input("Enter new marks: "))
+
+        query = """
+                   UPDATE marks
+                   SET marks = %s
+                   WHERE student_id = %s
+                   AND teacher_id = %s
+                   AND course_id = %s 
+                   
+                   """
+
+        cursor.execute(query,(mark,student_id,teacher,course_id))
+        conn.commit()
+        print("The marks are updated successfully..")
+
+
+    except mysql.connector.Error as err:
+        print("Error:", err)
+
+    except ValueError:
+        print("Invalid input.")
+
+
 
 
 
