@@ -5,13 +5,21 @@ from auth import(
     email_exists,
 )
 
+from teacher import (
+    view_enrolled_students,
+)
 
-def add_marks(teacher_id):
+
+def add_marks(user_id):
+    view_enrolled_students()
+
+add_marks(13)
+
+
+
+
+def update_marks(user_id):
     pass
 
-
-def update_marks(teacher_id):
-    pass
-
-def view_marks(teacher_id):
+def view_marks(user_id):
     pass
