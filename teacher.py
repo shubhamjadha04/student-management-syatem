@@ -4,11 +4,11 @@ from auth import(
     validate_email,
     email_exists,
 )
-from marks import(
-    add_marks,
-    update_marks,
-    view_marks,
-)
+# from marks import(
+#     add_marks,
+#     update_marks,
+#     view_marks,
+# )
 
 
 # view profile
@@ -149,6 +149,73 @@ def view_enrolled_students(teacher_id):
 
     except mysql.connector.Error as e:
         print("Error:", e)
+
+# add marks function
+def add_marks(user_id):
+    try:
+        # display all the student which are enrolled in teacher course
+        view_enrolled_students(user_id)
+
+        student_id = input("Enter student ID: ")
+
+        # checking all my courses
+        view_my_courses(user_id)
+
+        course_id = input("Enter course ID: ")
+
+        # checking if the student is enrolled for the course
+        query = """
+                SELECT student_id, course_id
+                FROM enrollments
+                WHERE student_id = %s and course_id = %s """
+
+        cursor.execute(query,(student_id,course_id))
+        enroll = cursor.fetchone()
+
+        if not enroll:
+            print("The student did not enrolled in this course.")
+            return
+
+        marks = int(input("Enter the marks: "))
+        if marks < 1 and marks >100:
+            print("Please enter valid marks.")
+            return
+
+        # to get teacher id 
+        query =  """
+                SELECT teacher_id 
+                from users u join
+                teachers t
+                on u.user_id = t.user_id
+                where u.user_id = %s
+                """
+
+        cursor.execute(query,(user_id,))
+        teacher_id = cursor.fetchone()
+
+        teacher = teacher_id[0]
+
+        # inserting the marks
+        query = """
+                INSERT INTO marks(student_id,course_id,teacher_id,marks)
+                VALUES(%s,%s,%s,%s)
+                    """
+
+        cursor.execute(query,(student_id,course_id,teacher,marks))
+        conn.commit()
+
+        print("Marks added successfully..")
+
+    except mysql.connector.Error as e:
+        print("database error",e)
+        conn.rollback()
+
+    except ValueError as e:
+        print("Invalid Input..")
+
+add_marks(13)
+     
+
 
 
 # marks menu
