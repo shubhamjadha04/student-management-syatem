@@ -299,7 +299,57 @@ WHERE t.teacher_id = %s;
         print("Invalid input.")
 
 
+#  view marks function
+def view_marks(user_id):
+    query = """
+                  SELECT teacher_id 
+                    from users u join
+                    teachers t
+                    on u.user_id = t.user_id
+                    where u.user_id = %s
+            """
+    cursor.execute(query,(user_id,))
+    teacher_id = cursor.fetchone()
+    teacher_id = teacher_id[0]
+    
 
+
+    try:
+        query = """
+            SELECT
+                s.student_id,
+                u.name,
+                c.course_name,
+                m.marks
+            FROM teachers t
+            JOIN marks m
+                ON t.teacher_id = m.teacher_id
+            JOIN students s
+                ON s.student_id = m.student_id
+            JOIN users u
+                ON s.user_id = u.user_id
+            JOIN courses c
+                ON m.course_id = c.course_id
+            WHERE t.teacher_id = %s
+            ORDER BY c.course_name, u.name;
+        """
+
+        cursor.execute(query, (teacher_id,))
+        records = cursor.fetchall()
+
+        if not records:
+            print("\nNo marks found.")
+            return
+
+        print("\n==================== STUDENT MARKS ====================")
+        print(f"{'Student ID':<12}{'Name':<20}{'Course':<20}{'Marks'}")
+        print("-" * 60)
+
+        for row in records:
+            print(f"{row[0]:<12}{row[1]:<20}{row[2]:<20}{row[3]}")
+
+    except Exception as e:
+        print("Error:", e)
 
 
 # marks menu
