@@ -8,8 +8,40 @@ from auth import(
 
 # view_courses FUNCTION
 def view_courses(user_id):
-    pass
-   
+    try:
+
+        query = """
+                select c.course_id ,c.course_name, c.course_code,c.credits
+                from users u 
+                join students s 
+                on u.user_id = s.user_id 
+
+                join enrollments e
+                on s.student_id = e.student_id 
+
+                join courses c
+                on e.course_id = c.course_id
+
+                where u.user_id = %s;
+
+                """
+        cursor.execute(query,(user_id,))
+        courses = cursor.fetchall()
+
+        if not courses:
+            print("No course Found !!")
+            return
+
+        for course in courses:
+            print(f"{course[0]:<8}{course[1]:<20}{course[2]:<15}{course[3]:<10}")
+
+        print("=" * 55)
+
+    except mysql.connector.Error:
+        print("DataBase Error. ")
+        return
+
+    
 
 
 # view_profile FUNCTION
