@@ -1,6 +1,6 @@
 from auth import admin_login,student_login,teacher_login
 from student import(
-    view_attendance,
+    
     view_courses,
     view_marks,
     view_profile,
@@ -86,6 +86,7 @@ def admin_menu(admin_id):
 
         else:
             print("Invalid choice. Please try again.")
+
             
 # teacher menu function 
 def teacher_menu(teacher_id):
@@ -95,8 +96,8 @@ def teacher_menu(teacher_id):
         print("2. View My Courses")
         print("3. View Enrolled Students")
         print("4. Manage Marks")
-        print("5. Manage Attendance")
-        print("6. Logout")
+        # print("5. Manage Attendance")
+        print("5. Logout")
         print("==================================")
 
         choice = input("Enter your choice: ")
@@ -113,10 +114,10 @@ def teacher_menu(teacher_id):
         elif choice == "4":
             marks_menu(teacher_id)
 
-        elif choice == "5":
-            attendance_menu(teacher_id)
+        # elif choice == "5":
+        #     attendance_menu(teacher_id)
 
-        elif choice == "6":
+        elif choice == "5":
             print("Logging out...")
             break
 
@@ -138,8 +139,8 @@ def student_menu(user_id):
         print("1. View Profile")
         print("2. View Courses")
         print("3. View Marks")
-        print("4. View Attendance")
-        print("5. Logout")
+        # print("4. View Attendance")
+        print("4. Logout")
 
         print("=" * 40)
 
@@ -154,10 +155,10 @@ def student_menu(user_id):
         elif choice == "3":
             view_marks(user_id)
 
-        elif choice == "4":
-            view_attendance(user_id)
+        # elif choice == "4":
+        #     view_attendance(user_id)
 
-        elif choice == "5":
+        elif choice == "4":
             print("Logged out successfully.")
             break
 
