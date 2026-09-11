@@ -87,7 +87,46 @@ def view_profile(user_id):
 
 # view_marks FUNCTION
 def view_marks():
-    pass
+    try:
+        query = """
+            SELECT
+                c.course_id,
+                c.course_name,
+                c.course_code,
+                m.marks
+            FROM users u
+            JOIN students s
+                ON u.user_id = s.user_id
+            JOIN marks m
+                ON s.student_id = m.student_id
+            JOIN courses c
+                ON m.course_id = c.course_id
+            WHERE u.user_id = %s
+        """
+
+        cursor.execute(query, (user_id,))
+        marks = cursor.fetchall()
+
+        if not marks:
+            print("No marks found.")
+            return
+
+        print("\n========== MY MARKS ==========")
+        print(f"{'ID':<8}{'COURSE NAME':<20}{'CODE':<15}{'MARKS':<10}")
+        print("-" * 53)
+
+        for mark in marks:
+            print(
+                f"{mark[0]:<8}"
+                f"{mark[1]:<20}"
+                f"{mark[2]:<15}"
+                f"{mark[3]:<10}"
+            )
+
+        print("=" * 53)
+
+    except mysql.connector.Error as e:
+        print("Database Error:", e)
 
 
 # # view_attendance FUNCTION
